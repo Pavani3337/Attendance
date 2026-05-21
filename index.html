@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>Multi Student Attendance</title>
+<title>Attendance System</title>
 <link rel="stylesheet" href="style.css">
 </head>
 
@@ -9,50 +9,41 @@
 
 <h1>🗓 Attendance System</h1>
 
-<!-- ADD STUDENT -->
 <div class="box">
 
     <h2>Add Student</h2>
 
     <input id="roll" placeholder="Roll No">
     <input id="name" placeholder="Name">
-
-    <button onclick="addStudent()">Add</button>
+    <button id="addStudentBtn">Add Student</button>
 
 </div>
 
-<!-- ADD SUBJECT -->
 <div class="box">
 
     <h2>Add Subject</h2>
 
-    <input id="subject" placeholder="Subject Name">
-
-    <button onclick="addSubject()">Add</button>
+    <input id="subject" placeholder="Subject">
+    <button id="addSubjectBtn">Add Subject</button>
 
 </div>
 
-<!-- SELECT SUBJECT -->
 <div class="box">
 
     <h2>Take Attendance</h2>
 
     <select id="subjectSelect"></select>
-
-    <button onclick="loadAttendance()">Load</button>
+    <button id="loadBtn">Load</button>
 
 </div>
 
-<!-- ATTENDANCE LIST -->
 <div id="attendanceBox"></div>
 
-<!-- REPORT -->
 <div class="box">
 
     <h2>Report</h2>
 
-    <button onclick="showReport()">Show Report</button>
-
+    <button id="reportBtn">Show Report</button>
     <div id="report"></div>
 
 </div>

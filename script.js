@@ -1,58 +1,65 @@
 let students = [];
 let subjects = [];
-let attendance = {}; 
-// structure:
-// attendance = { DBMS: { roll1: true/false } }
+let attendance = {};
 
-function addStudent(){
+const rollInput = document.getElementById("roll");
+const nameInput = document.getElementById("name");
+const subjectInput = document.getElementById("subject");
 
-    let roll = document.getElementById("roll").value;
-    let name = document.getElementById("name").value;
+const subjectSelect = document.getElementById("subjectSelect");
+const attendanceBox = document.getElementById("attendanceBox");
+const reportBox = document.getElementById("report");
 
-    if(!roll || !name) return;
+// ADD STUDENT
+document.getElementById("addStudentBtn").addEventListener("click", () => {
 
-    students.push({roll, name});
+    if(!rollInput.value || !nameInput.value) return;
 
-    document.getElementById("roll").value = "";
-    document.getElementById("name").value = "";
-}
+    students.push({
+        roll: rollInput.value,
+        name: nameInput.value
+    });
 
-function addSubject(){
+    rollInput.value = "";
+    nameInput.value = "";
+});
 
-    let subject = document.getElementById("subject").value;
+// ADD SUBJECT
+document.getElementById("addSubjectBtn").addEventListener("click", () => {
 
-    if(!subject) return;
+    if(!subjectInput.value) return;
 
-    subjects.push(subject);
+    subjects.push(subjectInput.value);
 
-    attendance[subject] = {};
+    attendance[subjectInput.value] = {};
 
-    updateSubjectDropdown();
+    subjectInput.value = "";
 
-    document.getElementById("subject").value = "";
-}
+    updateDropdown();
+});
 
-function updateSubjectDropdown(){
+// UPDATE DROPDOWN
+function updateDropdown(){
 
-    let select = document.getElementById("subjectSelect");
-
-    select.innerHTML = "";
+    subjectSelect.innerHTML = "";
 
     subjects.forEach(sub => {
 
-        select.innerHTML += `
-            <option value="${sub}">${sub}</option>
-        `;
+        let opt = document.createElement("option");
+        opt.value = sub;
+        opt.innerText = sub;
+        subjectSelect.appendChild(opt);
     });
 }
 
-function loadAttendance(){
+// LOAD ATTENDANCE
+document.getElementById("loadBtn").addEventListener("click", () => {
 
-    let subject = document.getElementById("subjectSelect").value;
+    let subject = subjectSelect.value;
 
-    let box = document.getElementById("attendanceBox");
+    if(!subject) return;
 
-    box.innerHTML = `<h2>${subject} Attendance</h2>`;
+    attendanceBox.innerHTML = `<h2>${subject}</h2>`;
 
     students.forEach(stu => {
 
@@ -60,41 +67,34 @@ function loadAttendance(){
             attendance[subject][stu.roll] = false;
         }
 
-        box.innerHTML += `
-        <div class="student">
+        let div = document.createElement("div");
+        div.className = "student";
 
+        div.innerHTML = `
             ${stu.roll} - ${stu.name}
-
-            <button onclick="mark('${subject}','${stu.roll}',true)">
-                Present
-            </button>
-
-            <button onclick="mark('${subject}','${stu.roll}',false)">
-                Absent
-            </button>
-
-            <span>
-                Status:
-                ${attendance[subject][stu.roll] ? "Present" : "Absent"}
-            </span>
-
-        </div>
+            <button class="pBtn">Present</button>
+            <button class="aBtn">Absent</button>
+            <span>${attendance[subject][stu.roll] ? "Present" : "Absent"}</span>
         `;
+
+        div.querySelector(".pBtn").onclick = () => {
+            attendance[subject][stu.roll] = true;
+            div.querySelector("span").innerText = "Present";
+        };
+
+        div.querySelector(".aBtn").onclick = () => {
+            attendance[subject][stu.roll] = false;
+            div.querySelector("span").innerText = "Absent";
+        };
+
+        attendanceBox.appendChild(div);
     });
-}
+});
 
-function mark(subject, roll, status){
+// REPORT
+document.getElementById("reportBtn").addEventListener("click", () => {
 
-    attendance[subject][roll] = status;
-
-    loadAttendance();
-}
-
-function showReport(){
-
-    let report = document.getElementById("report");
-
-    report.innerHTML = "";
+    reportBox.innerHTML = "";
 
     students.forEach(stu => {
 
@@ -106,17 +106,17 @@ function showReport(){
             if(attendance[sub] && attendance[sub][stu.roll]){
                 present++;
             }
-
         });
 
         let percent = total ? (present/total)*100 : 0;
 
-        report.innerHTML += `
-            <div class="box">
-                ${stu.roll} - ${stu.name}
-                <br>
-                Attendance: ${percent.toFixed(1)}%
-            </div>
-        `;
+        let div = document.createElement("div");
+        div.className = "box";
+
+        div.innerText =
+            stu.roll + " - " + stu.name +
+            " → " + percent.toFixed(1) + "%";
+
+        reportBox.appendChild(div);
     });
-}
+});
