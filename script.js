@@ -1,123 +1,122 @@
-let subjects = JSON.parse(localStorage.getItem("attendance")) || [];
+let students = [];
+let subjects = [];
+let attendance = {}; 
+// structure:
+// attendance = { DBMS: { roll1: true/false } }
 
-let currentSubject = null;
+function addStudent(){
 
-// SAVE
-function save(){
-    localStorage.setItem("attendance", JSON.stringify(subjects));
+    let roll = document.getElementById("roll").value;
+    let name = document.getElementById("name").value;
+
+    if(!roll || !name) return;
+
+    students.push({roll, name});
+
+    document.getElementById("roll").value = "";
+    document.getElementById("name").value = "";
 }
 
-// ADD SUBJECT
-document.getElementById("addSubjectBtn").onclick = function(){
+function addSubject(){
 
-    let input = document.getElementById("subjectInput");
-    let name = input.value.trim();
+    let subject = document.getElementById("subject").value;
 
-    if(name === "") return;
+    if(!subject) return;
 
-    subjects.push({
-        id: Date.now(),
-        name: name,
-        total: 0,
-        present: 0,
-        absent: 0
+    subjects.push(subject);
+
+    attendance[subject] = {};
+
+    updateSubjectDropdown();
+
+    document.getElementById("subject").value = "";
+}
+
+function updateSubjectDropdown(){
+
+    let select = document.getElementById("subjectSelect");
+
+    select.innerHTML = "";
+
+    subjects.forEach(sub => {
+
+        select.innerHTML += `
+            <option value="${sub}">${sub}</option>
+        `;
     });
+}
 
-    input.value = "";
-    save();
-    renderSubjects();
-};
+function loadAttendance(){
 
-// RENDER HOME
-function renderSubjects(){
+    let subject = document.getElementById("subjectSelect").value;
 
-    let container = document.getElementById("subjectsContainer");
-    container.innerHTML = "";
+    let box = document.getElementById("attendanceBox");
 
-    subjects.forEach(s => {
+    box.innerHTML = `<h2>${subject} Attendance</h2>`;
 
-        container.innerHTML += `
-        <div class="card">
+    students.forEach(stu => {
 
-            <h2>📘 ${s.name}</h2>
+        if(attendance[subject][stu.roll] === undefined){
+            attendance[subject][stu.roll] = false;
+        }
 
-            <p>Attendance: ${getPercent(s)}%</p>
+        box.innerHTML += `
+        <div class="student">
 
-            <button onclick="openSubject(${s.id})">Open</button>
-            <button onclick="deleteSubject(${s.id})">Delete</button>
+            ${stu.roll} - ${stu.name}
+
+            <button onclick="mark('${subject}','${stu.roll}',true)">
+                Present
+            </button>
+
+            <button onclick="mark('${subject}','${stu.roll}',false)">
+                Absent
+            </button>
+
+            <span>
+                Status:
+                ${attendance[subject][stu.roll] ? "Present" : "Absent"}
+            </span>
 
         </div>
         `;
     });
 }
 
-// OPEN SUBJECT
-function openSubject(id){
+function mark(subject, roll, status){
 
-    currentSubject = subjects.find(s => s.id === id);
+    attendance[subject][roll] = status;
 
-    document.getElementById("homePage").style.display = "none";
-    document.getElementById("dashboardPage").style.display = "block";
-
-    document.getElementById("subjectTitle").innerText = currentSubject.name;
-
-    updateUI();
+    loadAttendance();
 }
 
-// BACK
-document.getElementById("backBtn").onclick = function(){
+function showReport(){
 
-    document.getElementById("dashboardPage").style.display = "none";
-    document.getElementById("homePage").style.display = "block";
+    let report = document.getElementById("report");
 
-    save();
-    renderSubjects();
-};
+    report.innerHTML = "";
 
-// PRESENT
-document.getElementById("presentBtn").onclick = function(){
+    students.forEach(stu => {
 
-    currentSubject.total++;
-    currentSubject.present++;
+        let total = subjects.length;
+        let present = 0;
 
-    updateUI();
-};
+        subjects.forEach(sub => {
 
-// ABSENT
-document.getElementById("absentBtn").onclick = function(){
+            if(attendance[sub] && attendance[sub][stu.roll]){
+                present++;
+            }
 
-    currentSubject.total++;
-    currentSubject.absent++;
+        });
 
-    updateUI();
-};
+        let percent = total ? (present/total)*100 : 0;
 
-// UPDATE UI
-function updateUI(){
-
-    document.getElementById("total").innerText = currentSubject.total;
-    document.getElementById("present").innerText = currentSubject.present;
-    document.getElementById("absent").innerText = currentSubject.absent;
-    document.getElementById("percentage").innerText = getPercent(currentSubject);
-
-    save();
+        report.innerHTML += `
+            <div class="box">
+                ${stu.roll} - ${stu.name}
+                <br>
+                Attendance: ${percent.toFixed(1)}%
+            </div>
+        `;
+    });
 }
-
-// PERCENTAGE
-function getPercent(s){
-
-    if(s.total === 0) return 0;
-
-    return ((s.present / s.total) * 100).toFixed(1);
-}
-
-// DELETE SUBJECT
-function deleteSubject(id){
-
-    subjects = subjects.filter(s => s.id !== id);
-    save();
-    renderSubjects();
-}
-
-// START
-renderSubjects();

@@ -1,48 +1,59 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Attendance Tracker</title>
+<title>Multi Student Attendance</title>
 <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
 
-<div id="homePage">
+<h1>🗓 Attendance System</h1>
 
-    <h1>🗓 Attendance Tracker</h1>
+<!-- ADD STUDENT -->
+<div class="box">
 
-    <div class="top">
+    <h2>Add Student</h2>
 
-        <input type="text" id="subjectInput" placeholder="Enter Subject">
+    <input id="roll" placeholder="Roll No">
+    <input id="name" placeholder="Name">
 
-        <button id="addSubjectBtn">Add Subject</button>
-
-    </div>
-
-    <div id="subjectsContainer"></div>
+    <button onclick="addStudent()">Add</button>
 
 </div>
 
-<!-- DASHBOARD -->
-<div id="dashboardPage">
+<!-- ADD SUBJECT -->
+<div class="box">
 
-    <button id="backBtn">⬅ Back</button>
+    <h2>Add Subject</h2>
 
-    <h1 id="subjectTitle"></h1>
+    <input id="subject" placeholder="Subject Name">
 
-    <div class="section">
+    <button onclick="addSubject()">Add</button>
 
-        <p>Total Classes: <span id="total"></span></p>
-        <p>Present: <span id="present"></span></p>
-        <p>Absent: <span id="absent"></span></p>
-        <p>Attendance: <span id="percentage"></span>%</p>
+</div>
 
-        <button id="presentBtn">Present</button>
-        <button id="absentBtn">Absent</button>
+<!-- SELECT SUBJECT -->
+<div class="box">
 
-    </div>
+    <h2>Take Attendance</h2>
+
+    <select id="subjectSelect"></select>
+
+    <button onclick="loadAttendance()">Load</button>
+
+</div>
+
+<!-- ATTENDANCE LIST -->
+<div id="attendanceBox"></div>
+
+<!-- REPORT -->
+<div class="box">
+
+    <h2>Report</h2>
+
+    <button onclick="showReport()">Show Report</button>
+
+    <div id="report"></div>
 
 </div>
 
