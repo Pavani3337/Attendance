@@ -1,12 +1,82 @@
 // ======================
-// DATA
+// LOCAL STORAGE DATA
 // ======================
 
-let students = [];
+let students =
+JSON.parse(
+    localStorage.getItem("students")
+) || [];
 
-let subjects = [];
+let subjects =
+JSON.parse(
+    localStorage.getItem("subjects")
+) || [];
 
-let attendanceRecords = [];
+let attendanceRecords =
+JSON.parse(
+    localStorage.getItem("attendanceRecords")
+) || [];
+
+// ======================
+// SAVE DATA
+// ======================
+
+function saveData(){
+
+    localStorage.setItem(
+        "students",
+        JSON.stringify(students)
+    );
+
+    localStorage.setItem(
+        "subjects",
+        JSON.stringify(subjects)
+    );
+
+    localStorage.setItem(
+        "attendanceRecords",
+        JSON.stringify(attendanceRecords)
+    );
+}
+
+// ======================
+// LOAD SUBJECT DROPDOWNS
+// ======================
+
+function loadSubjects(){
+
+    let subjectSelect =
+    document.getElementById(
+        "subjectSelect"
+    );
+
+    let reportSubject =
+    document.getElementById(
+        "reportSubject"
+    );
+
+    subjectSelect.innerHTML = "";
+    reportSubject.innerHTML = "";
+
+    subjects.forEach(sub=>{
+
+        let option1 =
+        document.createElement("option");
+
+        option1.value = sub;
+        option1.innerText = sub;
+
+        subjectSelect.appendChild(option1);
+
+        let option2 =
+        document.createElement("option");
+
+        option2.value = sub;
+        option2.innerText = sub;
+
+        reportSubject.appendChild(option2);
+    });
+}
 
 // ======================
 // ADD STUDENT
@@ -40,6 +110,8 @@ document.getElementById(
         roll,
         name
     });
+
+    saveData();
 
     document.getElementById(
         "roll"
@@ -78,18 +150,9 @@ document.getElementById(
 
     subjects.push(subject);
 
-    let option =
-    document.createElement(
-        "option"
-    );
+    saveData();
 
-    option.value = subject;
-
-    option.innerText = subject;
-
-    document.getElementById(
-        "subjectSelect"
-    ).appendChild(option);
+    loadSubjects();
 
     document.getElementById(
         "subject"
@@ -197,6 +260,16 @@ document.getElementById(
         return;
     }
 
+    // REMOVE OLD RECORDS
+    attendanceRecords =
+    attendanceRecords.filter(r=>
+
+        !(
+            r.subject===subject &&
+            r.date===date
+        )
+    );
+
     students.forEach(stu=>{
 
         let status =
@@ -218,6 +291,8 @@ document.getElementById(
         });
     });
 
+    saveData();
+
     alert(
         "Attendance Saved Successfully"
     );
@@ -231,6 +306,25 @@ document.getElementById(
     "reportBtn"
 ).onclick = function(){
 
+    let subject =
+    document.getElementById(
+        "reportSubject"
+    ).value;
+
+    let date =
+    document.getElementById(
+        "reportDate"
+    ).value;
+
+    if(!subject || !date){
+
+        alert(
+            "Select Subject and Date"
+        );
+
+        return;
+    }
+
     let report =
     document.getElementById(
         "report"
@@ -238,143 +332,115 @@ document.getElementById(
 
     report.innerHTML = "";
 
-    subjects.forEach(sub=>{
+    let box =
+    document.createElement(
+        "div"
+    );
 
-        // SUBJECT TITLE
-        let subjectBox =
-        document.createElement(
-            "div"
+    box.className = "student";
+
+    let html = `
+
+        <h2>
+            📘 ${subject}
+        </h2>
+
+        <h3>
+            📅 ${date}
+        </h3>
+
+        <table>
+
+            <tr>
+
+                <th>
+                    Roll Number
+                </th>
+
+                <th>
+                    Student Name
+                </th>
+
+                <th>
+                    Attended Classes
+                </th>
+
+                <th>
+                    Status
+                </th>
+
+            </tr>
+    `;
+
+    students.forEach(stu=>{
+
+        let record =
+        attendanceRecords.find(r=>
+
+            r.roll===stu.roll &&
+            r.subject===subject &&
+            r.date===date
         );
 
-        subjectBox.className = "box";
+        let attended =
+        (
+            record &&
+            record.status==="Present"
+        )
+        ? 1
+        : 0;
 
-        subjectBox.innerHTML = `
+        let status =
+        (
+            record &&
+            record.status==="Present"
+        )
+        ? "Present"
+        : "Absent";
 
-            <h2>
-                📘 ${sub}
-            </h2>
+        html += `
+
+            <tr>
+
+                <td>
+                    ${stu.roll}
+                </td>
+
+                <td>
+                    ${stu.name}
+                </td>
+
+                <td>
+                    ${attended}
+                </td>
+
+                <td class="
+                    ${status==="Present"
+                    ?
+                    "present"
+                    :
+                    "absent"}
+                ">
+
+                    ${status}
+
+                </td>
+
+            </tr>
         `;
-
-        report.appendChild(
-            subjectBox
-        );
-
-        // UNIQUE DATES
-        let dates = [
-
-            ...new Set(
-
-                attendanceRecords
-                .filter(r=>
-                    r.subject===sub
-                )
-                .map(r=>r.date)
-
-            )
-        ];
-
-        dates.forEach(date=>{
-
-            let tableBox =
-            document.createElement(
-                "div"
-            );
-
-            tableBox.className =
-            "student";
-
-            let html = `
-
-                <h3>
-                    📅 ${date}
-                </h3>
-
-                <table>
-
-                    <tr>
-
-                        <th>
-                            Roll Number
-                        </th>
-
-                        <th>
-                            Student Name
-                        </th>
-
-                        <th>
-                            Attended Classes
-                        </th>
-
-                        <th>
-                            Status
-                        </th>
-
-                    </tr>
-            `;
-
-            students.forEach(stu=>{
-
-                let records =
-                attendanceRecords.filter(r=>
-
-                    r.roll===stu.roll &&
-                    r.subject===sub &&
-                    r.date===date
-                );
-
-                let attended =
-                records.filter(r=>
-                    r.status==="Present"
-                ).length;
-
-                let status =
-                attended > 0
-                ?
-                "Present"
-                :
-                "Absent";
-
-                html += `
-
-                    <tr>
-
-                        <td>
-                            ${stu.roll}
-                        </td>
-
-                        <td>
-                            ${stu.name}
-                        </td>
-
-                        <td>
-                            ${attended}
-                        </td>
-
-                        <td class="
-                            ${status==="Present"
-                            ?
-                            "present"
-                            :
-                            "absent"}
-                        ">
-
-                            ${status}
-
-                        </td>
-
-                    </tr>
-                `;
-            });
-
-            html += `
-                </table>
-            `;
-
-            tableBox.innerHTML = html;
-
-            report.appendChild(
-                tableBox
-            );
-        });
     });
+
+    html += `
+        </table>
+    `;
+
+    box.innerHTML = html;
+
+    report.appendChild(box);
 };
+
+// ======================
+// START
+// ======================
+
+loadSubjects();
