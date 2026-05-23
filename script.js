@@ -134,7 +134,15 @@ reportSubject.appendChild(op2);
 
 function deleteStudent(index){
 
+let removedRoll =
+students[index].roll;
+
 students.splice(index,1);
+
+attendance =
+attendance.filter(a=>
+a.roll !== removedRoll
+);
 
 saveData();
 
@@ -323,6 +331,23 @@ alert(
 return;
 }
 
+// REMOVE OLD SAME DATE+SUBJECT RECORDS
+
+attendance =
+attendance.filter(a=>
+
+!(
+
+a.subject === subject
+
+&&
+
+a.date === date
+
+)
+
+);
+
 for(let i=0;i<students.length;i++){
 
 let status =
@@ -399,6 +424,8 @@ let html =
 
 + "</tr>";
 
+let found = false;
+
 for(let i=0;i<attendance.length;i++){
 
 if(
@@ -410,6 +437,8 @@ attendance[i].subject===subject
 attendance[i].date===date
 
 ){
+
+found = true;
 
 html +=
 
@@ -441,7 +470,16 @@ html +=
 
 html += "</table>";
 
+if(found){
+
 report.innerHTML = html;
+
+}else{
+
+report.innerHTML =
+
+"<h3>No Attendance Found</h3>";
+}
 };
 
 // ======================
