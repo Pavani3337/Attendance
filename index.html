@@ -1,49 +1,87 @@
 <!DOCTYPE html>
 <html>
+
 <head>
+
 <title>Attendance System</title>
-<link rel="stylesheet" href="style.css">
+
+<link rel="stylesheet"
+      href="style.css">
+
 </head>
 
 <body>
 
-<h1>🗓 Attendance System</h1>
+<h1>🗓 Attendance Management System</h1>
 
+<!-- STUDENTS -->
 <div class="box">
 
     <h2>Add Student</h2>
 
-    <input id="roll" placeholder="Roll No">
-    <input id="name" placeholder="Name">
-    <button id="addStudentBtn">Add Student</button>
+    <input id="roll"
+           placeholder="Roll No">
+
+    <input id="name"
+           placeholder="Name">
+
+    <button id="addStudentBtn">
+        Add Student
+    </button>
 
 </div>
 
+<!-- SUBJECTS -->
 <div class="box">
 
     <h2>Add Subject</h2>
 
-    <input id="subject" placeholder="Subject">
-    <button id="addSubjectBtn">Add Subject</button>
+    <input id="subject"
+           placeholder="Subject">
+
+    <button id="addSubjectBtn">
+        Add Subject
+    </button>
 
 </div>
 
+<!-- ATTENDANCE -->
 <div class="box">
 
     <h2>Take Attendance</h2>
 
     <select id="subjectSelect"></select>
-    <button id="loadBtn">Load</button>
+
+    <input type="date"
+           id="dateInput">
+
+    <button id="loadBtn">
+        Load Students
+    </button>
 
 </div>
 
+<!-- STUDENT LIST -->
 <div id="attendanceBox"></div>
 
+<!-- SAVE -->
 <div class="box">
 
-    <h2>Report</h2>
+    <button id="saveBtn">
+        Save Attendance
+    </button>
 
-    <button id="reportBtn">Show Report</button>
+</div>
+
+<!-- REPORT -->
+<div class="box">
+
+    <h2>Attendance Report</h2>
+
+    <button id="reportBtn">
+        Show Report
+    </button>
+
     <div id="report"></div>
 
 </div>

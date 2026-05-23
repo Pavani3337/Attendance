@@ -1,122 +1,210 @@
 let students = [];
 let subjects = [];
-let attendance = {};
-
-const rollInput = document.getElementById("roll");
-const nameInput = document.getElementById("name");
-const subjectInput = document.getElementById("subject");
-
-const subjectSelect = document.getElementById("subjectSelect");
-const attendanceBox = document.getElementById("attendanceBox");
-const reportBox = document.getElementById("report");
+let attendanceRecords = [];
 
 // ADD STUDENT
-document.getElementById("addStudentBtn").addEventListener("click", () => {
+document.getElementById(
+    "addStudentBtn"
+).onclick = function(){
 
-    if(!rollInput.value || !nameInput.value) return;
+    let roll =
+    document.getElementById("roll").value;
+
+    let name =
+    document.getElementById("name").value;
+
+    if(!roll || !name) return;
 
     students.push({
-        roll: rollInput.value,
-        name: nameInput.value
+        roll,
+        name
     });
 
-    rollInput.value = "";
-    nameInput.value = "";
-});
+    document.getElementById("roll").value="";
+    document.getElementById("name").value="";
+};
 
 // ADD SUBJECT
-document.getElementById("addSubjectBtn").addEventListener("click", () => {
+document.getElementById(
+    "addSubjectBtn"
+).onclick = function(){
 
-    if(!subjectInput.value) return;
+    let sub =
+    document.getElementById("subject").value;
 
-    subjects.push(subjectInput.value);
+    if(!sub) return;
 
-    attendance[subjectInput.value] = {};
+    subjects.push(sub);
 
-    subjectInput.value = "";
+    let option =
+    document.createElement("option");
 
-    updateDropdown();
-});
+    option.value = sub;
+    option.innerText = sub;
 
-// UPDATE DROPDOWN
-function updateDropdown(){
+    document.getElementById(
+        "subjectSelect"
+    ).appendChild(option);
 
-    subjectSelect.innerHTML = "";
+    document.getElementById("subject").value="";
+};
 
-    subjects.forEach(sub => {
+// LOAD STUDENTS
+document.getElementById(
+    "loadBtn"
+).onclick = function(){
 
-        let opt = document.createElement("option");
-        opt.value = sub;
-        opt.innerText = sub;
-        subjectSelect.appendChild(opt);
-    });
-}
+    let box =
+    document.getElementById(
+        "attendanceBox"
+    );
 
-// LOAD ATTENDANCE
-document.getElementById("loadBtn").addEventListener("click", () => {
+    box.innerHTML="";
 
-    let subject = subjectSelect.value;
+    students.forEach(stu=>{
 
-    if(!subject) return;
+        let div =
+        document.createElement("div");
 
-    attendanceBox.innerHTML = `<h2>${subject}</h2>`;
-
-    students.forEach(stu => {
-
-        if(attendance[subject][stu.roll] === undefined){
-            attendance[subject][stu.roll] = false;
-        }
-
-        let div = document.createElement("div");
         div.className = "student";
 
         div.innerHTML = `
+
             ${stu.roll} - ${stu.name}
-            <button class="pBtn">Present</button>
-            <button class="aBtn">Absent</button>
-            <span>${attendance[subject][stu.roll] ? "Present" : "Absent"}</span>
+
+            <select id="status-${stu.roll}">
+
+                <option value="Present">
+                    Present
+                </option>
+
+                <option value="Absent">
+                    Absent
+                </option>
+
+            </select>
         `;
 
-        div.querySelector(".pBtn").onclick = () => {
-            attendance[subject][stu.roll] = true;
-            div.querySelector("span").innerText = "Present";
-        };
-
-        div.querySelector(".aBtn").onclick = () => {
-            attendance[subject][stu.roll] = false;
-            div.querySelector("span").innerText = "Absent";
-        };
-
-        attendanceBox.appendChild(div);
+        box.appendChild(div);
     });
-});
+};
+
+// SAVE ATTENDANCE
+document.getElementById(
+    "saveBtn"
+).onclick = function(){
+
+    let subject =
+    document.getElementById(
+        "subjectSelect"
+    ).value;
+
+    let date =
+    document.getElementById(
+        "dateInput"
+    ).value;
+
+    if(!subject || !date){
+
+        alert(
+            "Select subject and date"
+        );
+
+        return;
+    }
+
+    students.forEach(stu=>{
+
+        let status =
+        document.getElementById(
+            `status-${stu.roll}`
+        ).value;
+
+        attendanceRecords.push({
+
+            roll:stu.roll,
+
+            name:stu.name,
+
+            subject,
+
+            date,
+
+            status
+        });
+    });
+
+    alert(
+        "Attendance Saved"
+    );
+};
 
 // REPORT
-document.getElementById("reportBtn").addEventListener("click", () => {
+document.getElementById(
+    "reportBtn"
+).onclick = function(){
 
-    reportBox.innerHTML = "";
+    let report =
+    document.getElementById(
+        "report"
+    );
 
-    students.forEach(stu => {
+    report.innerHTML="";
 
-        let total = subjects.length;
-        let present = 0;
+    students.forEach(stu=>{
 
-        subjects.forEach(sub => {
+        let div =
+        document.createElement("div");
 
-            if(attendance[sub] && attendance[sub][stu.roll]){
-                present++;
-            }
+        div.className = "student";
+
+        let html =
+        `<h3>
+            ${stu.roll} - ${stu.name}
+        </h3>`;
+
+        subjects.forEach(sub=>{
+
+            let records =
+            attendanceRecords.filter(r=>
+
+                r.roll===stu.roll &&
+                r.subject===sub
+            );
+
+            let total =
+            records.length;
+
+            let present =
+            records.filter(r=>
+                r.status==="Present"
+            ).length;
+
+            let percent =
+            total
+            ?
+            ((present/total)*100)
+            .toFixed(1)
+            :
+            0;
+
+            html += `
+
+                <p>
+
+                    ${sub}
+
+                    →
+                    ${percent}%
+
+                    (${present}/${total})
+
+                </p>
+            `;
         });
 
-        let percent = total ? (present/total)*100 : 0;
+        div.innerHTML = html;
 
-        let div = document.createElement("div");
-        div.className = "box";
-
-        div.innerText =
-            stu.roll + " - " + stu.name +
-            " → " + percent.toFixed(1) + "%";
-
-        reportBox.appendChild(div);
+        report.appendChild(div);
     });
-});
+};
