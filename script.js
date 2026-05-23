@@ -1,21 +1,18 @@
 // ======================
-// LOCAL STORAGE DATA
+// STORAGE
 // ======================
 
 let students =
-JSON.parse(
-    localStorage.getItem("students")
-) || [];
+JSON.parse(localStorage.getItem("students"))
+|| [];
 
 let subjects =
-JSON.parse(
-    localStorage.getItem("subjects")
-) || [];
+JSON.parse(localStorage.getItem("subjects"))
+|| [];
 
-let attendanceRecords =
-JSON.parse(
-    localStorage.getItem("attendanceRecords")
-) || [];
+let attendance =
+JSON.parse(localStorage.getItem("attendance"))
+|| [];
 
 // ======================
 // SAVE DATA
@@ -34,26 +31,22 @@ function saveData(){
     );
 
     localStorage.setItem(
-        "attendanceRecords",
-        JSON.stringify(attendanceRecords)
+        "attendance",
+        JSON.stringify(attendance)
     );
 }
 
 // ======================
-// LOAD SUBJECT DROPDOWNS
+// DROPDOWNS
 // ======================
 
-function loadSubjects(){
+function loadDropdowns(){
 
     let subjectSelect =
-    document.getElementById(
-        "subjectSelect"
-    );
+    document.getElementById("subjectSelect");
 
     let reportSubject =
-    document.getElementById(
-        "reportSubject"
-    );
+    document.getElementById("reportSubject");
 
     subjectSelect.innerHTML = "";
     reportSubject.innerHTML = "";
@@ -84,47 +77,35 @@ function loadSubjects(){
 
 document.getElementById(
     "addStudentBtn"
-).onclick = function(){
+).addEventListener("click", ()=>{
 
     let roll =
-    document.getElementById(
-        "roll"
-    ).value.trim();
+    document.getElementById("roll")
+    .value.trim();
 
     let name =
-    document.getElementById(
-        "name"
-    ).value.trim();
+    document.getElementById("name")
+    .value.trim();
 
     if(!roll || !name){
 
-        alert(
-            "Enter Roll Number and Name"
-        );
+        alert("Enter student details");
 
         return;
     }
 
     students.push({
-
         roll,
         name
     });
 
     saveData();
 
-    document.getElementById(
-        "roll"
-    ).value = "";
+    document.getElementById("roll").value="";
+    document.getElementById("name").value="";
 
-    document.getElementById(
-        "name"
-    ).value = "";
-
-    alert(
-        "Student Added"
-    );
-};
+    alert("Student Added");
+});
 
 // ======================
 // ADD SUBJECT
@@ -132,18 +113,15 @@ document.getElementById(
 
 document.getElementById(
     "addSubjectBtn"
-).onclick = function(){
+).addEventListener("click", ()=>{
 
     let subject =
-    document.getElementById(
-        "subject"
-    ).value.trim();
+    document.getElementById("subject")
+    .value.trim();
 
     if(!subject){
 
-        alert(
-            "Enter Subject Name"
-        );
+        alert("Enter subject");
 
         return;
     }
@@ -152,16 +130,12 @@ document.getElementById(
 
     saveData();
 
-    loadSubjects();
+    loadDropdowns();
 
-    document.getElementById(
-        "subject"
-    ).value = "";
+    document.getElementById("subject").value="";
 
-    alert(
-        "Subject Added"
-    );
-};
+    alert("Subject Added");
+});
 
 // ======================
 // LOAD STUDENTS
@@ -169,51 +143,39 @@ document.getElementById(
 
 document.getElementById(
     "loadBtn"
-).onclick = function(){
+).addEventListener("click", ()=>{
 
     let subject =
-    document.getElementById(
-        "subjectSelect"
-    ).value;
+    document.getElementById("subjectSelect")
+    .value;
 
     let date =
-    document.getElementById(
-        "dateInput"
-    ).value;
+    document.getElementById("dateInput")
+    .value;
 
     if(!subject || !date){
 
-        alert(
-            "Select Subject and Date"
-        );
+        alert("Select subject and date");
 
         return;
     }
 
     let box =
-    document.getElementById(
-        "attendanceBox"
-    );
+    document.getElementById("attendanceBox");
 
     box.innerHTML = "";
 
     students.forEach(stu=>{
 
         let div =
-        document.createElement(
-            "div"
-        );
+        document.createElement("div");
 
         div.className = "student";
 
         div.innerHTML = `
 
             <h3>
-
-                ${stu.roll}
-                -
-                ${stu.name}
-
+                ${stu.roll} - ${stu.name}
             </h3>
 
             <select id="status-${stu.roll}">
@@ -231,7 +193,7 @@ document.getElementById(
 
         box.appendChild(div);
     });
-};
+});
 
 // ======================
 // SAVE ATTENDANCE
@@ -239,34 +201,29 @@ document.getElementById(
 
 document.getElementById(
     "saveBtn"
-).onclick = function(){
+).addEventListener("click", ()=>{
 
     let subject =
-    document.getElementById(
-        "subjectSelect"
-    ).value;
+    document.getElementById("subjectSelect")
+    .value;
 
     let date =
-    document.getElementById(
-        "dateInput"
-    ).value;
+    document.getElementById("dateInput")
+    .value;
 
     if(!subject || !date){
 
-        alert(
-            "Select Subject and Date"
-        );
+        alert("Select subject and date");
 
         return;
     }
 
-    // REMOVE OLD RECORDS
-    attendanceRecords =
-    attendanceRecords.filter(r=>
+    attendance =
+    attendance.filter(record=>
 
         !(
-            r.subject===subject &&
-            r.date===date
+            record.subject===subject &&
+            record.date===date
         )
     );
 
@@ -277,7 +234,7 @@ document.getElementById(
             `status-${stu.roll}`
         ).value;
 
-        attendanceRecords.push({
+        attendance.push({
 
             roll:stu.roll,
 
@@ -293,10 +250,8 @@ document.getElementById(
 
     saveData();
 
-    alert(
-        "Attendance Saved Successfully"
-    );
-};
+    alert("Attendance Saved");
+});
 
 // ======================
 // SHOW REPORT
@@ -304,42 +259,31 @@ document.getElementById(
 
 document.getElementById(
     "reportBtn"
-).onclick = function(){
+).addEventListener("click", ()=>{
 
     let subject =
-    document.getElementById(
-        "reportSubject"
-    ).value;
+    document.getElementById("reportSubject")
+    .value;
 
     let date =
-    document.getElementById(
-        "reportDate"
-    ).value;
+    document.getElementById("reportDate")
+    .value;
 
     if(!subject || !date){
 
-        alert(
-            "Select Subject and Date"
-        );
+        alert("Select report subject/date");
 
         return;
     }
 
     let report =
-    document.getElementById(
-        "report"
-    );
+    document.getElementById("report");
 
     report.innerHTML = "";
 
-    let box =
-    document.createElement(
-        "div"
-    );
-
-    box.className = "student";
-
     let html = `
+
+        <div class="student">
 
         <h2>
             📘 ${subject}
@@ -354,11 +298,11 @@ document.getElementById(
             <tr>
 
                 <th>
-                    Roll Number
+                    Roll No
                 </th>
 
                 <th>
-                    Student Name
+                    Name
                 </th>
 
                 <th>
@@ -375,28 +319,24 @@ document.getElementById(
     students.forEach(stu=>{
 
         let record =
-        attendanceRecords.find(r=>
+        attendance.find(r=>
 
             r.roll===stu.roll &&
             r.subject===subject &&
             r.date===date
         );
 
-        let attended =
-        (
-            record &&
-            record.status==="Present"
-        )
-        ? 1
-        : 0;
+        let attended = 0;
+        let status = "Absent";
 
-        let status =
-        (
-            record &&
-            record.status==="Present"
-        )
-        ? "Present"
-        : "Absent";
+        if(record){
+
+            if(record.status==="Present"){
+
+                attended = 1;
+                status = "Present";
+            }
+        }
 
         html += `
 
@@ -421,9 +361,7 @@ document.getElementById(
                     :
                     "absent"}
                 ">
-
                     ${status}
-
                 </td>
 
             </tr>
@@ -432,15 +370,14 @@ document.getElementById(
 
     html += `
         </table>
+        </div>
     `;
 
-    box.innerHTML = html;
-
-    report.appendChild(box);
-};
+    report.innerHTML = html;
+});
 
 // ======================
 // START
 // ======================
 
-loadSubjects();
+loadDropdowns();
