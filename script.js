@@ -1,6 +1,6 @@
-// ======================
-// STORAGE
-// ======================
+// ===================
+// DATA
+// ===================
 
 let students =
 JSON.parse(localStorage.getItem("students"))
@@ -14,9 +14,9 @@ let attendance =
 JSON.parse(localStorage.getItem("attendance"))
 || [];
 
-// ======================
-// SAVE DATA
-// ======================
+// ===================
+// SAVE
+// ===================
 
 function saveData(){
 
@@ -36,67 +36,63 @@ function saveData(){
     );
 }
 
-// ======================
-// DROPDOWNS
-// ======================
+// ===================
+// LOAD SUBJECTS
+// ===================
 
-function loadDropdowns(){
+function loadSubjects(){
 
-    let subjectSelect =
+    let s1 =
     document.getElementById("subjectSelect");
 
-    let reportSubject =
+    let s2 =
     document.getElementById("reportSubject");
 
-    subjectSelect.innerHTML = "";
-    reportSubject.innerHTML = "";
+    s1.innerHTML = "";
+    s2.innerHTML = "";
 
-    subjects.forEach(sub=>{
+    for(let i=0;i<subjects.length;i++){
 
-        let option1 =
+        let op1 =
         document.createElement("option");
 
-        option1.value = sub;
-        option1.innerText = sub;
+        op1.value = subjects[i];
+        op1.innerText = subjects[i];
 
-        subjectSelect.appendChild(option1);
+        s1.appendChild(op1);
 
-        let option2 =
+        let op2 =
         document.createElement("option");
 
-        option2.value = sub;
-        option2.innerText = sub;
+        op2.value = subjects[i];
+        op2.innerText = subjects[i];
 
-        reportSubject.appendChild(option2);
-    });
+        s2.appendChild(op2);
+    }
 }
 
-// ======================
+// ===================
 // ADD STUDENT
-// ======================
+// ===================
 
 document.getElementById(
     "addStudentBtn"
-).addEventListener("click", ()=>{
+).onclick = function(){
 
     let roll =
-    document.getElementById("roll")
-    .value.trim();
+    document.getElementById("roll").value;
 
     let name =
-    document.getElementById("name")
-    .value.trim();
+    document.getElementById("name").value;
 
-    if(!roll || !name){
-
-        alert("Enter student details");
-
+    if(roll==="" || name===""){
+        alert("Enter details");
         return;
     }
 
     students.push({
-        roll,
-        name
+        roll:roll,
+        name:name
     });
 
     saveData();
@@ -105,279 +101,202 @@ document.getElementById(
     document.getElementById("name").value="";
 
     alert("Student Added");
-});
+};
 
-// ======================
+// ===================
 // ADD SUBJECT
-// ======================
+// ===================
 
 document.getElementById(
     "addSubjectBtn"
-).addEventListener("click", ()=>{
+).onclick = function(){
 
-    let subject =
-    document.getElementById("subject")
-    .value.trim();
+    let sub =
+    document.getElementById("subject").value;
 
-    if(!subject){
-
+    if(sub===""){
         alert("Enter subject");
-
         return;
     }
 
-    subjects.push(subject);
+    subjects.push(sub);
 
     saveData();
 
-    loadDropdowns();
+    loadSubjects();
 
     document.getElementById("subject").value="";
 
     alert("Subject Added");
-});
+};
 
-// ======================
-// LOAD STUDENTS
-// ======================
+// ===================
+// LOAD ATTENDANCE
+// ===================
 
 document.getElementById(
     "loadBtn"
-).addEventListener("click", ()=>{
-
-    let subject =
-    document.getElementById("subjectSelect")
-    .value;
-
-    let date =
-    document.getElementById("dateInput")
-    .value;
-
-    if(!subject || !date){
-
-        alert("Select subject and date");
-
-        return;
-    }
+).onclick = function(){
 
     let box =
     document.getElementById("attendanceBox");
 
     box.innerHTML = "";
 
-    students.forEach(stu=>{
+    for(let i=0;i<students.length;i++){
 
         let div =
         document.createElement("div");
 
         div.className = "student";
 
-        div.innerHTML = `
+        div.innerHTML =
 
-            <h3>
-                ${stu.roll} - ${stu.name}
-            </h3>
+        students[i].roll
+        + " - "
+        + students[i].name
 
-            <select id="status-${stu.roll}">
+        + "<br><br>"
 
-                <option value="Present">
-                    Present
-                </option>
+        + "<select id='status"
+        + i +
+        "'>"
 
-                <option value="Absent">
-                    Absent
-                </option>
+        + "<option>Present</option>"
 
-            </select>
-        `;
+        + "<option>Absent</option>"
+
+        + "</select>";
 
         box.appendChild(div);
-    });
-});
+    }
+};
 
-// ======================
+// ===================
 // SAVE ATTENDANCE
-// ======================
+// ===================
 
 document.getElementById(
     "saveBtn"
-).addEventListener("click", ()=>{
+).onclick = function(){
 
     let subject =
-    document.getElementById("subjectSelect")
-    .value;
+    document.getElementById("subjectSelect").value;
 
     let date =
-    document.getElementById("dateInput")
-    .value;
+    document.getElementById("dateInput").value;
 
-    if(!subject || !date){
-
-        alert("Select subject and date");
-
+    if(subject==="" || date===""){
+        alert("Select subject/date");
         return;
     }
 
-    attendance =
-    attendance.filter(record=>
-
-        !(
-            record.subject===subject &&
-            record.date===date
-        )
-    );
-
-    students.forEach(stu=>{
+    for(let i=0;i<students.length;i++){
 
         let status =
         document.getElementById(
-            `status-${stu.roll}`
+            "status"+i
         ).value;
 
         attendance.push({
 
-            roll:stu.roll,
+            roll:students[i].roll,
 
-            name:stu.name,
+            name:students[i].name,
 
-            subject,
+            subject:subject,
 
-            date,
+            date:date,
 
-            status
+            status:status
         });
-    });
+    }
 
     saveData();
 
     alert("Attendance Saved");
-});
+};
 
-// ======================
-// SHOW REPORT
-// ======================
+// ===================
+// REPORT
+// ===================
 
 document.getElementById(
     "reportBtn"
-).addEventListener("click", ()=>{
+).onclick = function(){
 
     let subject =
-    document.getElementById("reportSubject")
-    .value;
+    document.getElementById("reportSubject").value;
 
     let date =
-    document.getElementById("reportDate")
-    .value;
-
-    if(!subject || !date){
-
-        alert("Select report subject/date");
-
-        return;
-    }
+    document.getElementById("reportDate").value;
 
     let report =
     document.getElementById("report");
 
     report.innerHTML = "";
 
-    let html = `
+    let html =
 
-        <div class="student">
+    "<table>"
 
-        <h2>
-            📘 ${subject}
-        </h2>
+    + "<tr>"
 
-        <h3>
-            📅 ${date}
-        </h3>
+    + "<th>Roll No</th>"
 
-        <table>
+    + "<th>Name</th>"
 
-            <tr>
+    + "<th>Subject</th>"
 
-                <th>
-                    Roll No
-                </th>
+    + "<th>Date</th>"
 
-                <th>
-                    Name
-                </th>
+    + "<th>Status</th>"
 
-                <th>
-                    Attended Classes
-                </th>
+    + "</tr>";
 
-                <th>
-                    Status
-                </th>
+    for(let i=0;i<attendance.length;i++){
 
-            </tr>
-    `;
+        if(
+            attendance[i].subject===subject
+            &&
+            attendance[i].date===date
+        ){
 
-    students.forEach(stu=>{
+            html +=
 
-        let record =
-        attendance.find(r=>
+            "<tr>"
 
-            r.roll===stu.roll &&
-            r.subject===subject &&
-            r.date===date
-        );
+            + "<td>"
+            + attendance[i].roll
+            + "</td>"
 
-        let attended = 0;
-        let status = "Absent";
+            + "<td>"
+            + attendance[i].name
+            + "</td>"
 
-        if(record){
+            + "<td>"
+            + attendance[i].subject
+            + "</td>"
 
-            if(record.status==="Present"){
+            + "<td>"
+            + attendance[i].date
+            + "</td>"
 
-                attended = 1;
-                status = "Present";
-            }
+            + "<td>"
+            + attendance[i].status
+            + "</td>"
+
+            + "</tr>";
         }
+    }
 
-        html += `
-
-            <tr>
-
-                <td>
-                    ${stu.roll}
-                </td>
-
-                <td>
-                    ${stu.name}
-                </td>
-
-                <td>
-                    ${attended}
-                </td>
-
-                <td class="
-                    ${status==="Present"
-                    ?
-                    "present"
-                    :
-                    "absent"}
-                ">
-                    ${status}
-                </td>
-
-            </tr>
-        `;
-    });
-
-    html += `
-        </table>
-        </div>
-    `;
+    html += "</table>";
 
     report.innerHTML = html;
-});
+};
 
-// ======================
+// ===================
 // START
-// ======================
+// ===================
 
-loadDropdowns();
+loadSubjects();

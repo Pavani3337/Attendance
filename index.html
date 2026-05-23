@@ -1,35 +1,22 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 
 <head>
-
-<meta charset="UTF-8">
-<meta name="viewport"
-      content="width=device-width, initial-scale=1.0">
-
-<title>Attendance System</title>
-
-<link rel="stylesheet"
-      href="style.css">
-
+    <title>Attendance System</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
 
-<h1>🗓 Attendance Management System</h1>
+<h1>Attendance Management System</h1>
 
-<!-- ADD STUDENT -->
 <div class="box">
 
     <h2>Add Student</h2>
 
-    <input type="text"
-           id="roll"
-           placeholder="Roll Number">
+    <input type="text" id="roll" placeholder="Roll Number">
 
-    <input type="text"
-           id="name"
-           placeholder="Student Name">
+    <input type="text" id="name" placeholder="Student Name">
 
     <button id="addStudentBtn">
         Add Student
@@ -37,14 +24,11 @@
 
 </div>
 
-<!-- ADD SUBJECT -->
 <div class="box">
 
     <h2>Add Subject</h2>
 
-    <input type="text"
-           id="subject"
-           placeholder="Subject Name">
+    <input type="text" id="subject" placeholder="Subject">
 
     <button id="addSubjectBtn">
         Add Subject
@@ -52,15 +36,13 @@
 
 </div>
 
-<!-- TAKE ATTENDANCE -->
 <div class="box">
 
     <h2>Take Attendance</h2>
 
     <select id="subjectSelect"></select>
 
-    <input type="date"
-           id="dateInput">
+    <input type="date" id="dateInput">
 
     <button id="loadBtn">
         Load Students
@@ -68,10 +50,8 @@
 
 </div>
 
-<!-- ATTENDANCE LIST -->
 <div id="attendanceBox"></div>
 
-<!-- SAVE -->
 <div class="box">
 
     <button id="saveBtn">
@@ -80,15 +60,13 @@
 
 </div>
 
-<!-- REPORT -->
 <div class="box">
 
     <h2>Attendance Report</h2>
 
     <select id="reportSubject"></select>
 
-    <input type="date"
-           id="reportDate">
+    <input type="date" id="reportDate">
 
     <button id="reportBtn">
         Show Report
