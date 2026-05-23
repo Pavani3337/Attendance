@@ -1,9 +1,14 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 
 <head>
 
-<title>Attendance System</title>
+<meta charset="UTF-8">
+
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0">
+
+<title>Attendance Management System</title>
 
 <link rel="stylesheet"
       href="style.css">
@@ -14,16 +19,18 @@
 
 <h1>🗓 Attendance Management System</h1>
 
-<!-- STUDENTS -->
+<!-- ADD STUDENT -->
 <div class="box">
 
     <h2>Add Student</h2>
 
-    <input id="roll"
-           placeholder="Roll No">
+    <input type="text"
+           id="roll"
+           placeholder="Roll Number">
 
-    <input id="name"
-           placeholder="Name">
+    <input type="text"
+           id="name"
+           placeholder="Student Name">
 
     <button id="addStudentBtn">
         Add Student
@@ -31,13 +38,14 @@
 
 </div>
 
-<!-- SUBJECTS -->
+<!-- ADD SUBJECT -->
 <div class="box">
 
     <h2>Add Subject</h2>
 
-    <input id="subject"
-           placeholder="Subject">
+    <input type="text"
+           id="subject"
+           placeholder="Subject Name">
 
     <button id="addSubjectBtn">
         Add Subject
@@ -45,7 +53,7 @@
 
 </div>
 
-<!-- ATTENDANCE -->
+<!-- TAKE ATTENDANCE -->
 <div class="box">
 
     <h2>Take Attendance</h2>
