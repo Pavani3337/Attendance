@@ -23,20 +23,20 @@ localStorage.getItem("attendance")
 
 function saveData(){
 
-    localStorage.setItem(
-        "students",
-        JSON.stringify(students)
-    );
+localStorage.setItem(
+"students",
+JSON.stringify(students)
+);
 
-    localStorage.setItem(
-        "subjects",
-        JSON.stringify(subjects)
-    );
+localStorage.setItem(
+"subjects",
+JSON.stringify(subjects)
+);
 
-    localStorage.setItem(
-        "attendance",
-        JSON.stringify(attendance)
-    );
+localStorage.setItem(
+"attendance",
+JSON.stringify(attendance)
+);
 }
 
 // ======================
@@ -45,32 +45,29 @@ function saveData(){
 
 function renderStudents(){
 
-    let list =
-    document.getElementById(
-        "studentsList"
-    );
+let list =
+document.getElementById(
+"studentsList"
+);
 
-    list.innerHTML = "";
+list.innerHTML = "";
 
-    for(let i=0;i<students.length;i++){
+for(let i=0;i<students.length;i++){
 
-        list.innerHTML += `
+list.innerHTML +=
 
-        <div class="student">
+"<div class='student'>"
 
-            ${students[i].roll}
-            -
-            ${students[i].name}
++ students[i].roll
++ " - "
++ students[i].name
 
-            <button onclick="
-                deleteStudent(${i})
-            ">
-                Delete
-            </button>
++ " <button onclick='deleteStudent("
++ i
++ ")'>Delete</button>"
 
-        </div>
-        `;
-    }
++ "</div>";
+}
 }
 
 // ======================
@@ -79,59 +76,56 @@ function renderStudents(){
 
 function renderSubjects(){
 
-    let list =
-    document.getElementById(
-        "subjectsList"
-    );
+let list =
+document.getElementById(
+"subjectsList"
+);
 
-    list.innerHTML = "";
+list.innerHTML = "";
 
-    let subjectSelect =
-    document.getElementById(
-        "subjectSelect"
-    );
+let subjectSelect =
+document.getElementById(
+"subjectSelect"
+);
 
-    let reportSubject =
-    document.getElementById(
-        "reportSubject"
-    );
+let reportSubject =
+document.getElementById(
+"reportSubject"
+);
 
-    subjectSelect.innerHTML = "";
-    reportSubject.innerHTML = "";
+subjectSelect.innerHTML = "";
+reportSubject.innerHTML = "";
 
-    for(let i=0;i<subjects.length;i++){
+for(let i=0;i<subjects.length;i++){
 
-        list.innerHTML += `
+list.innerHTML +=
 
-        <div class="student">
+"<div class='student'>"
 
-            ${subjects[i]}
++ subjects[i]
 
-            <button onclick="
-                deleteSubject(${i})
-            ">
-                Delete
-            </button>
++ " <button onclick='deleteSubject("
++ i
++ ")'>Delete</button>"
 
-        </div>
-        `;
++ "</div>";
 
-        let op1 =
-        document.createElement("option");
+let op1 =
+document.createElement("option");
 
-        op1.value = subjects[i];
-        op1.innerText = subjects[i];
+op1.value = subjects[i];
+op1.innerText = subjects[i];
 
-        subjectSelect.appendChild(op1);
+subjectSelect.appendChild(op1);
 
-        let op2 =
-        document.createElement("option");
+let op2 =
+document.createElement("option");
 
-        op2.value = subjects[i];
-        op2.innerText = subjects[i];
+op2.value = subjects[i];
+op2.innerText = subjects[i];
 
-        reportSubject.appendChild(op2);
-    }
+reportSubject.appendChild(op2);
+}
 }
 
 // ======================
@@ -140,11 +134,11 @@ function renderSubjects(){
 
 function deleteStudent(index){
 
-    students.splice(index,1);
+students.splice(index,1);
 
-    saveData();
+saveData();
 
-    renderStudents();
+renderStudents();
 }
 
 // ======================
@@ -153,19 +147,19 @@ function deleteStudent(index){
 
 function deleteSubject(index){
 
-    let removed =
-    subjects[index];
+let removedSubject =
+subjects[index];
 
-    subjects.splice(index,1);
+subjects.splice(index,1);
 
-    attendance =
-    attendance.filter(a=>
-        a.subject !== removed
-    );
+attendance =
+attendance.filter(a=>
+a.subject !== removedSubject
+);
 
-    saveData();
+saveData();
 
-    renderSubjects();
+renderSubjects();
 }
 
 // ======================
@@ -176,46 +170,47 @@ document.getElementById(
 "addStudentBtn"
 ).onclick = function(){
 
-    let roll =
-    document.getElementById(
-    "roll"
-    ).value.trim();
+let roll =
+document.getElementById(
+"roll"
+).value.trim();
 
-    let name =
-    document.getElementById(
-    "name"
-    ).value.trim();
+let name =
+document.getElementById(
+"name"
+).value.trim();
 
-    if(roll==="" || name===""){
+if(roll==="" || name===""){
 
-        alert(
-        "Enter student details"
-        );
+alert(
+"Enter Student Details"
+);
 
-        return;
-    }
+return;
+}
 
-    students.push({
+students.push({
 
-        roll:roll,
-        name:name
-    });
+roll:roll,
+name:name
 
-    saveData();
+});
 
-    renderStudents();
+saveData();
 
-    document.getElementById(
-    "roll"
-    ).value="";
+renderStudents();
 
-    document.getElementById(
-    "name"
-    ).value="";
+document.getElementById(
+"roll"
+).value = "";
 
-    alert(
-    "Student Added"
-    );
+document.getElementById(
+"name"
+).value = "";
+
+alert(
+"Student Added"
+);
 };
 
 // ======================
@@ -226,33 +221,33 @@ document.getElementById(
 "addSubjectBtn"
 ).onclick = function(){
 
-    let subject =
-    document.getElementById(
-    "subject"
-    ).value.trim();
+let subject =
+document.getElementById(
+"subject"
+).value.trim();
 
-    if(subject===""){
+if(subject===""){
 
-        alert(
-        "Enter subject"
-        );
+alert(
+"Enter Subject"
+);
 
-        return;
-    }
+return;
+}
 
-    subjects.push(subject);
+subjects.push(subject);
 
-    saveData();
+saveData();
 
-    renderSubjects();
+renderSubjects();
 
-    document.getElementById(
-    "subject"
-    ).value="";
+document.getElementById(
+"subject"
+).value = "";
 
-    alert(
-    "Subject Added"
-    );
+alert(
+"Subject Added"
+);
 };
 
 // ======================
@@ -263,43 +258,42 @@ document.getElementById(
 "loadBtn"
 ).onclick = function(){
 
-    let box =
-    document.getElementById(
-    "attendanceBox"
-    );
+let box =
+document.getElementById(
+"attendanceBox"
+);
 
-    box.innerHTML = "";
+box.innerHTML = "";
 
-    for(let i=0;i<students.length;i++){
+for(let i=0;i<students.length;i++){
 
-        let div =
-        document.createElement(
-        "div"
-        );
+let div =
+document.createElement(
+"div"
+);
 
-        div.className =
-        "student";
+div.className = "student";
 
-        div.innerHTML =
+div.innerHTML =
 
-        students[i].roll
-        + " - "
-        + students[i].name
+students[i].roll
++ " - "
++ students[i].name
 
-        + "<br><br>"
++ "<br><br>"
 
-        + "<select id='status"
-        + i
-        + "'>"
++ "<select id='status"
++ i
++ "'>"
 
-        + "<option>Present</option>"
++ "<option>Present</option>"
 
-        + "<option>Absent</option>"
++ "<option>Absent</option>"
 
-        + "</select>";
++ "</select>";
 
-        box.appendChild(div);
-    }
+box.appendChild(div);
+}
 };
 
 // ======================
@@ -310,56 +304,56 @@ document.getElementById(
 "saveBtn"
 ).onclick = function(){
 
-    let subject =
-    document.getElementById(
-    "subjectSelect"
-    ).value;
+let subject =
+document.getElementById(
+"subjectSelect"
+).value;
 
-    let date =
-    document.getElementById(
-    "dateInput"
-    ).value;
+let date =
+document.getElementById(
+"dateInput"
+).value;
 
-    if(subject==="" || date===""){
+if(subject==="" || date===""){
 
-        alert(
-        "Select subject/date"
-        );
+alert(
+"Select Subject and Date"
+);
 
-        return;
-    }
+return;
+}
 
-    for(let i=0;i<students.length;i++){
+for(let i=0;i<students.length;i++){
 
-        let status =
-        document.getElementById(
-        "status"+i
-        ).value;
+let status =
+document.getElementById(
+"status"+i
+).value;
 
-        attendance.push({
+attendance.push({
 
-            roll:
-            students[i].roll,
+roll:
+students[i].roll,
 
-            name:
-            students[i].name,
+name:
+students[i].name,
 
-            subject:
-            subject,
+subject:
+subject,
 
-            date:
-            date,
+date:
+date,
 
-            status:
-            status
-        });
-    }
+status:
+status
+});
+}
 
-    saveData();
+saveData();
 
-    alert(
-    "Attendance Saved"
-    );
+alert(
+"Attendance Saved"
+);
 };
 
 // ======================
@@ -370,83 +364,84 @@ document.getElementById(
 "reportBtn"
 ).onclick = function(){
 
-    let subject =
-    document.getElementById(
-    "reportSubject"
-    ).value;
+let subject =
+document.getElementById(
+"reportSubject"
+).value;
 
-    let date =
-    document.getElementById(
-    "reportDate"
-    ).value;
+let date =
+document.getElementById(
+"reportDate"
+).value;
 
-    let report =
-    document.getElementById(
-    "report"
-    );
+let report =
+document.getElementById(
+"report"
+);
 
-    report.innerHTML = "";
+report.innerHTML = "";
 
-    let html =
+let html =
 
-    "<table>"
+"<table>"
 
-    + "<tr>"
++ "<tr>"
 
-    + "<th>Roll No</th>"
++ "<th>Roll No</th>"
 
-    + "<th>Name</th>"
++ "<th>Name</th>"
 
-    + "<th>Subject</th>"
++ "<th>Subject</th>"
 
-    + "<th>Date</th>"
++ "<th>Date</th>"
 
-    + "<th>Status</th>"
++ "<th>Status</th>"
 
-    + "</tr>";
++ "</tr>";
 
-    for(let i=0;i<attendance.length;i++){
+for(let i=0;i<attendance.length;i++){
 
-        if(
+if(
 
-            attendance[i].subject===subject
+attendance[i].subject===subject
 
-            &&
+&&
 
-            attendance[i].date===date
-        ){
+attendance[i].date===date
 
-            html +=
+){
 
-            "<tr>"
+html +=
 
-            + "<td>"
-            + attendance[i].roll
-            + "</td>"
+"<tr>"
 
-            + "<td>"
-            + attendance[i].name
-            + "</td>"
++ "<td>"
++ attendance[i].roll
++ "</td>"
 
-            + "<td>"
-            + attendance[i].subject
-            + "</td>"
++ "<td>"
++ attendance[i].name
++ "</td>"
 
-            + "<td>"
-            + attendance[i].date
-            + "</td>"
++ "<td>"
++ attendance[i].subject
++ "</td>"
 
-            + "<td>"
-            + attendance[i].status
-            + "</td>"
++ "<td>"
++ attendance[i].date
++ "</td>"
 
-            + "</tr>";
-        }
-    }
++ "<td>"
++ attendance[i].status
++ "</td>"
 
-    html += "</table>";
++ "</tr>";
+}
+}
 
-    report.innerHTML = html;
+html += "</table>";
+
+report.innerHTML = html;
 };
 
 // ======================
@@ -457,73 +452,105 @@ document.getElementById(
 "studentReportBtn"
 ).onclick = function(){
 
-    let roll =
-    document.getElementById(
-    "searchRoll"
-    ).value;
+let roll =
+document.getElementById(
+"searchRoll"
+).value.trim();
 
-    let report =
-    document.getElementById(
-    "studentReport"
-    );
+let report =
+document.getElementById(
+"studentReport"
+);
 
-    report.innerHTML = "";
+report.innerHTML = "";
 
-    let html =
+if(roll===""){
 
-    "<table>"
+alert(
+"Enter Roll Number"
+);
 
-    + "<tr>"
+return;
+}
 
-    + "<th>Roll No</th>"
+let found = false;
 
-    + "<th>Name</th>"
+let html =
 
-    + "<th>Subject</th>"
+"<table>"
 
-    + "<th>Date</th>"
++ "<tr>"
 
-    + "<th>Status</th>"
++ "<th>Roll No</th>"
 
-    + "</tr>";
++ "<th>Name</th>"
 
-    for(let i=0;i<attendance.length;i++){
++ "<th>Subject</th>"
 
-        if(
-            attendance[i].roll===roll
-        ){
++ "<th>Date</th>"
 
-            html +=
++ "<th>Status</th>"
 
-            "<tr>"
++ "</tr>";
 
-            + "<td>"
-            + attendance[i].roll
-            + "</td>"
+for(let i=0;i<attendance.length;i++){
 
-            + "<td>"
-            + attendance[i].name
-            + "</td>"
+if(
 
-            + "<td>"
-            + attendance[i].subject
-            + "</td>"
+attendance[i].roll
+.toString()
+.trim()
 
-            + "<td>"
-            + attendance[i].date
-            + "</td>"
+===
 
-            + "<td>"
-            + attendance[i].status
-            + "</td>"
+roll
+.toString()
+.trim()
 
-            + "</tr>";
-        }
-    }
+){
 
-    html += "</table>";
+found = true;
 
-    report.innerHTML = html;
+html +=
+
+"<tr>"
+
++ "<td>"
++ attendance[i].roll
++ "</td>"
+
++ "<td>"
++ attendance[i].name
++ "</td>"
+
++ "<td>"
++ attendance[i].subject
++ "</td>"
+
++ "<td>"
++ attendance[i].date
++ "</td>"
+
++ "<td>"
++ attendance[i].status
++ "</td>"
+
++ "</tr>";
+}
+}
+
+html += "</table>";
+
+if(found){
+
+report.innerHTML = html;
+
+}else{
+
+report.innerHTML =
+
+"<h3>No Attendance Found</h3>";
+}
 };
 
 // ======================
