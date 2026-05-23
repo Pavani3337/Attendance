@@ -43,10 +43,14 @@ function saveData(){
 function loadSubjects(){
 
     let s1 =
-    document.getElementById("subjectSelect");
+    document.getElementById(
+        "subjectSelect"
+    );
 
     let s2 =
-    document.getElementById("reportSubject");
+    document.getElementById(
+        "reportSubject"
+    );
 
     s1.innerHTML = "";
     s2.innerHTML = "";
@@ -69,6 +73,112 @@ function loadSubjects(){
 
         s2.appendChild(op2);
     }
+
+    renderSubjects();
+}
+
+// ===================
+// RENDER STUDENTS
+// ===================
+
+function renderStudents(){
+
+    let box =
+    document.getElementById(
+        "studentsList"
+    );
+
+    if(!box) return;
+
+    box.innerHTML = "";
+
+    for(let i=0;i<students.length;i++){
+
+        box.innerHTML += `
+
+        <div class="student">
+
+            ${students[i].roll}
+            -
+            ${students[i].name}
+
+            <button onclick="
+                deleteStudent(${i})
+            ">
+                Delete
+            </button>
+
+        </div>
+        `;
+    }
+}
+
+// ===================
+// RENDER SUBJECTS
+// ===================
+
+function renderSubjects(){
+
+    let box =
+    document.getElementById(
+        "subjectsList"
+    );
+
+    if(!box) return;
+
+    box.innerHTML = "";
+
+    for(let i=0;i<subjects.length;i++){
+
+        box.innerHTML += `
+
+        <div class="student">
+
+            ${subjects[i]}
+
+            <button onclick="
+                deleteSubject(${i})
+            ">
+                Delete
+            </button>
+
+        </div>
+        `;
+    }
+}
+
+// ===================
+// DELETE STUDENT
+// ===================
+
+function deleteStudent(index){
+
+    students.splice(index,1);
+
+    saveData();
+
+    renderStudents();
+}
+
+// ===================
+// DELETE SUBJECT
+// ===================
+
+function deleteSubject(index){
+
+    let removedSubject =
+    subjects[index];
+
+    subjects.splice(index,1);
+
+    attendance =
+    attendance.filter(a=>
+        a.subject!==removedSubject
+    );
+
+    saveData();
+
+    loadSubjects();
 }
 
 // ===================
@@ -80,27 +190,45 @@ document.getElementById(
 ).onclick = function(){
 
     let roll =
-    document.getElementById("roll").value;
+    document.getElementById(
+        "roll"
+    ).value;
 
     let name =
-    document.getElementById("name").value;
+    document.getElementById(
+        "name"
+    ).value;
 
     if(roll==="" || name===""){
-        alert("Enter details");
+
+        alert(
+            "Enter details"
+        );
+
         return;
     }
 
     students.push({
+
         roll:roll,
         name:name
     });
 
     saveData();
 
-    document.getElementById("roll").value="";
-    document.getElementById("name").value="";
+    renderStudents();
 
-    alert("Student Added");
+    document.getElementById(
+        "roll"
+    ).value="";
+
+    document.getElementById(
+        "name"
+    ).value="";
+
+    alert(
+        "Student Added"
+    );
 };
 
 // ===================
@@ -112,10 +240,16 @@ document.getElementById(
 ).onclick = function(){
 
     let sub =
-    document.getElementById("subject").value;
+    document.getElementById(
+        "subject"
+    ).value;
 
     if(sub===""){
-        alert("Enter subject");
+
+        alert(
+            "Enter subject"
+        );
+
         return;
     }
 
@@ -125,9 +259,13 @@ document.getElementById(
 
     loadSubjects();
 
-    document.getElementById("subject").value="";
+    document.getElementById(
+        "subject"
+    ).value="";
 
-    alert("Subject Added");
+    alert(
+        "Subject Added"
+    );
 };
 
 // ===================
@@ -139,7 +277,9 @@ document.getElementById(
 ).onclick = function(){
 
     let box =
-    document.getElementById("attendanceBox");
+    document.getElementById(
+        "attendanceBox"
+    );
 
     box.innerHTML = "";
 
@@ -181,13 +321,21 @@ document.getElementById(
 ).onclick = function(){
 
     let subject =
-    document.getElementById("subjectSelect").value;
+    document.getElementById(
+        "subjectSelect"
+    ).value;
 
     let date =
-    document.getElementById("dateInput").value;
+    document.getElementById(
+        "dateInput"
+    ).value;
 
     if(subject==="" || date===""){
-        alert("Select subject/date");
+
+        alert(
+            "Select subject/date"
+        );
+
         return;
     }
 
@@ -214,7 +362,9 @@ document.getElementById(
 
     saveData();
 
-    alert("Attendance Saved");
+    alert(
+        "Attendance Saved"
+    );
 };
 
 // ===================
@@ -226,13 +376,19 @@ document.getElementById(
 ).onclick = function(){
 
     let subject =
-    document.getElementById("reportSubject").value;
+    document.getElementById(
+        "reportSubject"
+    ).value;
 
     let date =
-    document.getElementById("reportDate").value;
+    document.getElementById(
+        "reportDate"
+    ).value;
 
     let report =
-    document.getElementById("report");
+    document.getElementById(
+        "report"
+    );
 
     report.innerHTML = "";
 
@@ -300,3 +456,4 @@ document.getElementById(
 // ===================
 
 loadSubjects();
+renderStudents();
