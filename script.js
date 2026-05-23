@@ -1,22 +1,28 @@
-// ===================
+// ======================
 // DATA
-// ===================
+// ======================
 
 let students =
-JSON.parse(localStorage.getItem("students"))
+JSON.parse(
+    localStorage.getItem("students")
+)
 || [];
 
 let subjects =
-JSON.parse(localStorage.getItem("subjects"))
+JSON.parse(
+    localStorage.getItem("subjects")
+)
 || [];
 
 let attendance =
-JSON.parse(localStorage.getItem("attendance"))
+JSON.parse(
+    localStorage.getItem("attendance")
+)
 || [];
 
-// ===================
-// SAVE
-// ===================
+// ======================
+// SAVE DATA
+// ======================
 
 function saveData(){
 
@@ -36,65 +42,22 @@ function saveData(){
     );
 }
 
-// ===================
-// LOAD SUBJECTS
-// ===================
-
-function loadSubjects(){
-
-    let s1 =
-    document.getElementById(
-        "subjectSelect"
-    );
-
-    let s2 =
-    document.getElementById(
-        "reportSubject"
-    );
-
-    s1.innerHTML = "";
-    s2.innerHTML = "";
-
-    for(let i=0;i<subjects.length;i++){
-
-        let op1 =
-        document.createElement("option");
-
-        op1.value = subjects[i];
-        op1.innerText = subjects[i];
-
-        s1.appendChild(op1);
-
-        let op2 =
-        document.createElement("option");
-
-        op2.value = subjects[i];
-        op2.innerText = subjects[i];
-
-        s2.appendChild(op2);
-    }
-
-    renderSubjects();
-}
-
-// ===================
+// ======================
 // RENDER STUDENTS
-// ===================
+// ======================
 
 function renderStudents(){
 
-    let box =
+    let list =
     document.getElementById(
         "studentsList"
     );
 
-    if(!box) return;
-
-    box.innerHTML = "";
+    list.innerHTML = "";
 
     for(let i=0;i<students.length;i++){
 
-        box.innerHTML += `
+        list.innerHTML += `
 
         <div class="student">
 
@@ -113,24 +76,35 @@ function renderStudents(){
     }
 }
 
-// ===================
+// ======================
 // RENDER SUBJECTS
-// ===================
+// ======================
 
 function renderSubjects(){
 
-    let box =
+    let list =
     document.getElementById(
         "subjectsList"
     );
 
-    if(!box) return;
+    list.innerHTML = "";
 
-    box.innerHTML = "";
+    let subjectSelect =
+    document.getElementById(
+        "subjectSelect"
+    );
+
+    let reportSubject =
+    document.getElementById(
+        "reportSubject"
+    );
+
+    subjectSelect.innerHTML = "";
+    reportSubject.innerHTML = "";
 
     for(let i=0;i<subjects.length;i++){
 
-        box.innerHTML += `
+        list.innerHTML += `
 
         <div class="student">
 
@@ -144,12 +118,42 @@ function renderSubjects(){
 
         </div>
         `;
+
+        let option1 =
+        document.createElement(
+            "option"
+        );
+
+        option1.value =
+        subjects[i];
+
+        option1.innerText =
+        subjects[i];
+
+        subjectSelect.appendChild(
+            option1
+        );
+
+        let option2 =
+        document.createElement(
+            "option"
+        );
+
+        option2.value =
+        subjects[i];
+
+        option2.innerText =
+        subjects[i];
+
+        reportSubject.appendChild(
+            option2
+        );
     }
 }
 
-// ===================
+// ======================
 // DELETE STUDENT
-// ===================
+// ======================
 
 function deleteStudent(index){
 
@@ -160,9 +164,9 @@ function deleteStudent(index){
     renderStudents();
 }
 
-// ===================
+// ======================
 // DELETE SUBJECT
-// ===================
+// ======================
 
 function deleteSubject(index){
 
@@ -173,17 +177,18 @@ function deleteSubject(index){
 
     attendance =
     attendance.filter(a=>
-        a.subject!==removedSubject
+
+        a.subject !== removedSubject
     );
 
     saveData();
 
-    loadSubjects();
+    renderSubjects();
 }
 
-// ===================
+// ======================
 // ADD STUDENT
-// ===================
+// ======================
 
 document.getElementById(
     "addStudentBtn"
@@ -192,17 +197,17 @@ document.getElementById(
     let roll =
     document.getElementById(
         "roll"
-    ).value;
+    ).value.trim();
 
     let name =
     document.getElementById(
         "name"
-    ).value;
+    ).value.trim();
 
     if(roll==="" || name===""){
 
         alert(
-            "Enter details"
+            "Enter student details"
         );
 
         return;
@@ -211,6 +216,7 @@ document.getElementById(
     students.push({
 
         roll:roll,
+
         name:name
     });
 
@@ -231,20 +237,20 @@ document.getElementById(
     );
 };
 
-// ===================
+// ======================
 // ADD SUBJECT
-// ===================
+// ======================
 
 document.getElementById(
     "addSubjectBtn"
 ).onclick = function(){
 
-    let sub =
+    let subject =
     document.getElementById(
         "subject"
-    ).value;
+    ).value.trim();
 
-    if(sub===""){
+    if(subject===""){
 
         alert(
             "Enter subject"
@@ -253,11 +259,11 @@ document.getElementById(
         return;
     }
 
-    subjects.push(sub);
+    subjects.push(subject);
 
     saveData();
 
-    loadSubjects();
+    renderSubjects();
 
     document.getElementById(
         "subject"
@@ -268,9 +274,9 @@ document.getElementById(
     );
 };
 
-// ===================
-// LOAD ATTENDANCE
-// ===================
+// ======================
+// LOAD STUDENTS
+// ======================
 
 document.getElementById(
     "loadBtn"
@@ -286,9 +292,12 @@ document.getElementById(
     for(let i=0;i<students.length;i++){
 
         let div =
-        document.createElement("div");
+        document.createElement(
+            "div"
+        );
 
-        div.className = "student";
+        div.className =
+        "student";
 
         div.innerHTML =
 
@@ -299,8 +308,8 @@ document.getElementById(
         + "<br><br>"
 
         + "<select id='status"
-        + i +
-        "'>"
+        + i
+        + "'>"
 
         + "<option>Present</option>"
 
@@ -312,9 +321,9 @@ document.getElementById(
     }
 };
 
-// ===================
+// ======================
 // SAVE ATTENDANCE
-// ===================
+// ======================
 
 document.getElementById(
     "saveBtn"
@@ -333,7 +342,7 @@ document.getElementById(
     if(subject==="" || date===""){
 
         alert(
-            "Select subject/date"
+            "Select subject and date"
         );
 
         return;
@@ -348,15 +357,20 @@ document.getElementById(
 
         attendance.push({
 
-            roll:students[i].roll,
+            roll:
+            students[i].roll,
 
-            name:students[i].name,
+            name:
+            students[i].name,
 
-            subject:subject,
+            subject:
+            subject,
 
-            date:date,
+            date:
+            date,
 
-            status:status
+            status:
+            status
         });
     }
 
@@ -367,9 +381,9 @@ document.getElementById(
     );
 };
 
-// ===================
+// ======================
 // REPORT
-// ===================
+// ======================
 
 document.getElementById(
     "reportBtn"
@@ -413,8 +427,11 @@ document.getElementById(
     for(let i=0;i<attendance.length;i++){
 
         if(
+
             attendance[i].subject===subject
+
             &&
+
             attendance[i].date===date
         ){
 
@@ -451,9 +468,10 @@ document.getElementById(
     report.innerHTML = html;
 };
 
-// ===================
+// ======================
 // START
-// ===================
+// ======================
 
-loadSubjects();
 renderStudents();
+
+renderSubjects();
